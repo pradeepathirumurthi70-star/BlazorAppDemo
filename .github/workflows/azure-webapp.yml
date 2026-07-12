@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
@@ -24,14 +23,14 @@ jobs:
         run: dotnet restore BlazorAppDemo.csproj
 
       - name: Build Project
-        run: dotnet build BlazorAppDemo/BlazorAppDemo.csproj --configuration Release --no-restore
+        run: dotnet build BlazorAppDemo.csproj --configuration Release --no-restore
 
       - name: Publish Project
-        run: dotnet publish BlazorAppDemo/BlazorAppDemo.csproj --configuration Release --output ./publish
+        run: dotnet publish BlazorAppDemo.csproj --configuration Release --no-build --output ./publish
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: gitactionsDemo
+          app-name: YOUR_WEBAPP_NAME
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish
